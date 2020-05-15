@@ -50,24 +50,25 @@ public class Lancamento implements Serializable{
 	@JoinColumn(name = "id_usuario")
 	private Usuario usuario;
 
-	@Column(name = "tipo_lancamento")
+	@Column(name = "tipo")
 	@Enumerated(value = EnumType.STRING)
-	private TipoLancamento tipoLancamento;
+	private TipoLancamento tipo;
 
-	@Column(name = "status_lancamento")
+	@Column(name = "status")
 	@Enumerated(value = EnumType.STRING)
-	private StatusLancamento statusLancamento;
+	private StatusLancamento status;
 
 	@Column(name = "data_cadastro")
 	@Convert(converter = Jsr310JpaConverters.LocalDateConverter.class)
 	private LocalDate dataCadastro;
 	
-	public Lancamento () {
-		
+	
+	public Lancamento () {	
 	}
 
+
 	public Lancamento(Long id, String descricao, Integer ano, Integer mes, BigDecimal valor, Usuario usuario,
-			TipoLancamento tipoLancamento, StatusLancamento statusLancamento, LocalDate dataCadastro) {
+			TipoLancamento tipo, StatusLancamento status, LocalDate dataCadastro) {
 		super();
 		this.id = id;
 		this.descricao = descricao;
@@ -75,84 +76,101 @@ public class Lancamento implements Serializable{
 		this.mes = mes;
 		this.valor = valor;
 		this.usuario = usuario;
-		this.tipoLancamento = tipoLancamento;
-		this.statusLancamento = statusLancamento;
+		this.tipo = tipo;
+		this.status = status;
 		this.dataCadastro = dataCadastro;
 	}
-	
-	
+
 
 	public Long getId() {
 		return id;
 	}
 
+
 	public void setId(Long id) {
 		this.id = id;
 	}
+
 
 	public String getDescricao() {
 		return descricao;
 	}
 
+
 	public void setDescricao(String descricao) {
 		this.descricao = descricao;
 	}
+
 
 	public Integer getAno() {
 		return ano;
 	}
 
+
 	public void setAno(Integer ano) {
 		this.ano = ano;
 	}
+
 
 	public Integer getMes() {
 		return mes;
 	}
 
+
 	public void setMes(Integer mes) {
 		this.mes = mes;
 	}
+
 
 	public BigDecimal getValor() {
 		return valor;
 	}
 
+
 	public void setValor(BigDecimal valor) {
 		this.valor = valor;
 	}
+
 
 	public Usuario getUsuario() {
 		return usuario;
 	}
 
+
 	public void setUsuario(Usuario usuario) {
 		this.usuario = usuario;
 	}
 
-	public TipoLancamento getTipoLancamento() {
-		return tipoLancamento;
+
+	public TipoLancamento getTipo() {
+		return tipo;
 	}
 
-	public void setTipoLancamento(TipoLancamento tipoLancamento) {
-		this.tipoLancamento = tipoLancamento;
+
+	public void setTipo(TipoLancamento tipo) {
+		this.tipo = tipo;
 	}
 
-	public StatusLancamento getStatusLancamento() {
-		return statusLancamento;
+
+	public StatusLancamento getStatus() {
+		return status;
 	}
 
-	public void setStatusLancamento(StatusLancamento statusLancamento) {
-		this.statusLancamento = statusLancamento;
+
+	public void setStatus(StatusLancamento status) {
+		this.status = status;
 	}
+
 
 	public LocalDate getDataCadastro() {
 		return dataCadastro;
 	}
 
+
 	public void setDataCadastro(LocalDate dataCadastro) {
 		this.dataCadastro = dataCadastro;
 	}
+
 
 	@Override
 	public int hashCode() {
@@ -161,6 +179,7 @@ public class Lancamento implements Serializable{
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		return result;
 	}
+
 
 	@Override
 	public boolean equals(Object obj) {
@@ -178,6 +197,7 @@ public class Lancamento implements Serializable{
 			return false;
 		return true;
 	}
-	
-	
+
 }
+
+	

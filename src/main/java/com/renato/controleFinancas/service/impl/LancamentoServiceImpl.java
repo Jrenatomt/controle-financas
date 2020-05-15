@@ -3,6 +3,7 @@ package com.renato.controleFinancas.service.impl;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
@@ -14,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.renato.controleFinancas.exception.RegraNegocioException;
 import com.renato.controleFinancas.model.entity.Lancamento;
 import com.renato.controleFinancas.model.enums.StatusLancamento;
+import com.renato.controleFinancas.model.enums.TipoLancamento;
 import com.renato.controleFinancas.model.repository.LancamentoRepository;
 import com.renato.controleFinancas.service.LancamentoService;
 
@@ -27,7 +29,7 @@ public class LancamentoServiceImpl implements LancamentoService{
 	@Transactional
 	public Lancamento salvar(Lancamento lancamento) {
 		validar(lancamento);
-		lancamento.setStatusLancamento(StatusLancamento.PENDENTE);
+		lancamento.setStatus(StatusLancamento.PENDENTE);
 		return repository.save(lancamento);
 	}
 
@@ -60,7 +62,7 @@ public class LancamentoServiceImpl implements LancamentoService{
 
 	@Override
 	public void atualizarStatus(Lancamento lancamento, StatusLancamento status) {
-		lancamento.setStatusLancamento(status);
+		lancamento.setStatus(status);
 		atualizar(lancamento);
 			
 	}
@@ -87,9 +89,32 @@ public class LancamentoServiceImpl implements LancamentoService{
 			throw new RegraNegocioException("Informe um Valor válido.");
 		}
 		
-		if(lancamento.getTipoLancamento() == null) {
+		if(lancamento.getTipo() == null) {
 			throw new RegraNegocioException("Informe um tipo de Lançamento.");
 		}
 	
+	}
+
+	@Override
+	public Optional<Lancamento> obterPorId(Long id) {
+		return repository.findById(id);
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public BigDecimal obterSaldoPorUsuario(Long id) {
+		
+		BigDecimal receitas = repository.obterSaldoPorTipoLancamentoEUsuarioEStatus(id, TipoLancamento.RECEITA, StatusLancamento.EFETIVADO);
+		BigDecimal despesas = repository.obterSaldoPorTipoLancamentoEUsuarioEStatus(id, TipoLancamento.DESPESA, StatusLancamento.EFETIVADO);
+		
+		if(receitas == null) {
+			receitas = BigDecimal.ZERO;
+		}
+		
+		if(despesas == null) {
+			despesas = BigDecimal.ZERO;
+		}
+		
+		return receitas.subtract(despesas);
 	}
 }
